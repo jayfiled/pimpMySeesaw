@@ -9,34 +9,37 @@
 // ==/UserScript==
 
 (function () {
-    "use strict";
-    var vidExists = false;
-    var counter = 0;
-  
-    const checkIfVidExists = () => {
-      const vidElement = document.querySelector(".video-js");
-  
-      vidElement === true ? (vidExists = true) : (vidExists = vidElement);
-  
-      if (vidExists) {
-        vidElement.style.fontSize = "20px";
-      }
-      counter += 1;
-      console.log("%c Video player resize tool: ", "color: #bada55");
-      console.log(` Checked for a video on the page 👉 ${counter} time(s)`);
-  
-      setTimeout(checkIfVidExists, 1000);
-    };
-  
+  "use strict";
+  var vidExists = false;
+  var counter = 0;
+
+  const checkIfVidExists = () => {
+    const vidElement = document.querySelector(".video-js");
+
+    vidElement === true ? (vidExists = true) : (vidExists = vidElement);
+
+    if (vidExists) {
+      vidElement.style.fontSize = "20px";
+    }
+    counter += 1;
+    console.log("%c Video player resize tool: ", "color: #bada55");
+    console.log(` Checked for a video on the page 👉 ${counter} time(s)`);
+
+    setTimeout(checkIfVidExists, 1000);
+  };
+
   ///----- Dismiss activities section -----///
-  
+
   // Check local storage to see if any of the titles from the activities are in there, if they are, fly them away.
-  
-    const addDismissButton = () => {
-      const el = document.getElementsByClassName("ss-prompt-view__container");
-      for (let i = 0; i < el.length - 1; i++) {
+
+  const addDismissButton = () => {
+    const el = document.getElementsByClassName("ss-prompt-view__container");
+
+    for (let i = 0; i < el.length; i++) {
+      const hasDismissButton = el[i].querySelector(".fly");
+      if (!hasDismissButton) {
         const button = document.createElement("div");
-  
+        button.classList.add("fly");
         button.innerHTML = "✔";
         button.style.backgroundColor = "rgba(130, 255, 96, .8)";
         button.style.color = "#252A2A";
@@ -53,17 +56,19 @@
         button.addEventListener("click", (e) => flyAway(e));
         el[i].appendChild(button);
       }
-      // Check every 3 seconds for new activities loaded from infinite load
-        setTimeout(addDismissButton, 3000);
-    };
-  
-    // ? after dismissing 5 or 6, the layout looks weird - try making them fly further away
-    const flyAway = (e) => {
-  // Get the title of the e.currentTarget and save to local storage as a key value
-      e.currentTarget.parentElement.style.position = "absolute";
-      e.currentTarget.parentElement.style.left = "-1000px";
-    };
-  
-    addDismissButton();
+    }
+    // Check every 3 seconds for new activities loaded from infinite load
+
+    setTimeout(addDismissButton, 3000);
+  };
+
+  // ? after dismissing 5 or 6, the layout looks weird - try making them fly further away
+  const flyAway = (e) => {
+    // Get the title of the e.currentTarget and save to local storage as a key value
+    e.currentTarget.parentElement.style.position = "absolute";
+    e.currentTarget.parentElement.style.left = "-999999px";
+  };
+
+  addDismissButton();
     checkIfVidExists();
-  })();
+})();
